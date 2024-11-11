@@ -123,14 +123,23 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final response = await channel.invokeMethod<String>('calculate', {
-            'firstNumer': int.parse(firstNumber.text),
-            'secondNumer': int.parse(secondNumber.text),
-            'operation': operation
-          });
-          setState(() {
-            result = response;
-          });
+          try {
+            print(double.parse(firstNumber.text));
+            print(double.parse(secondNumber.text));
+            print(operation);
+            final response = await channel.invokeMethod<String>('calculate', {
+              'arguments': {
+                'firstNumber': double.parse(firstNumber.text),
+                'secondNumber': double.parse(secondNumber.text),
+                'operation': operation,
+              }
+            });
+            setState(() {
+              result = response;
+            });
+          } catch (e) {
+            print(e);
+          }
         },
         child: const Text('Calcular'),
       ),
